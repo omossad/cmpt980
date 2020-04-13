@@ -1,0 +1,20 @@
+Flow Duration
+Fwd Packet Length Max
+Fwd Packet Length Min
+Fwd Packet Length Std
+Flow IAT Mean
+Flow IAT Max
+Fwd IAT Mean
+Fwd IAT Max
+Fwd Header Length
+Fwd Packets/s
+Min Packet Length
+Max Packet Length
+Packet Length Std
+ACK Flag Count
+Average Packet Size
+Fwd Header Length.1
+Subflow Fwd Bytes
+Init_Win_bytes_forward
+min_seg_size_forward
+Label
