@@ -16,24 +16,37 @@ from keras.layers import Dense, Dropout
 from keras.utils import to_categorical
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 from keras.optimizers import Adam
+from keras.models import load_model
 import sys
-run_no = sys.argv[2]
-print('running script run no: ' + sys.argv[2])
 
+task = sys.argv[1]
+if task == 'train':
+    train_flag = True
+elif task == 'test':
+    train_flag = False
+    model_path = sys.argv[4]
+else:
+    sys.exit('Invalid Operation')
+
+features_file = sys.argv[2]
+run_no = sys.argv[3]
+print('running script run no: ' + sys.argv[3])
 
 max_val = 99999
 
-features_file = sys.argv[1]
 with open(features_file) as f:
     features = [feature.strip() for feature in f]
 
-with open('train_files.txt') as f:
-    train_files = [filename.strip() for filename in f]
+if train_flag:
+    with open('train_files.txt') as f:
+        train_files = [filename.strip() for filename in f]
 
 with open('test_files.txt') as f:
     test_files = [filename.strip() for filename in f]
 
-train_dir = '/scratch/omossad/CICDDoS2019/CSVs/01-12/'
+if train_flag:
+    train_dir = '/scratch/omossad/CICDDoS2019/CSVs/01-12/'
+
 test_dir = '/scratch/omossad/CICDDoS2019/CSVs/03-11/'
 output_dir ='../cedar/output/'
 
@@ -62,29 +75,28 @@ def read_file(filename, y_out):
     x = pd.DataFrame(scaled_df)
     return x
     
-
-#### LOAD TRAIN DATA ######
-
-
-new_x = pd.DataFrame()
-temp_y = []
 nClasses = 2
+#### LOAD TRAIN DATA ######
+if train_flag:
 
-for f in train_files:
-    print('Processing file ' + f + '\n')
-    new_x = new_x.append(read_file(train_dir + f, temp_y))
-    print('Processed file ' + f + ' , total samples is ' + str(len(temp_y)) + '\n')
+    new_x = pd.DataFrame()
+    temp_y = []
 
-#new_y = np.asarray(temp_y)
-new_y = to_categorical(temp_y, num_classes=nClasses)
+    for f in train_files:
+        print('Processing file ' + f + '\n')
+        new_x = new_x.append(read_file(train_dir + f, temp_y))
+        print('Processed file ' + f + ' , total samples is ' + str(len(temp_y)) + '\n')
 
-xTrain, xVal, yTrain, yVal = train_test_split(new_x, new_y, test_size = 0.2, random_state = 42)
-#np.savetxt('train_idx', idx1)
-#np.savetxt('test_idx', idx2)
+    #new_y = np.asarray(temp_y)
+    new_y = to_categorical(temp_y, num_classes=nClasses)
 
-print('train size: ', xTrain.shape)
-print('train labels: ', yTrain.shape)
-print('Valid size: ',  xVal.shape)
+    xTrain, xVal, yTrain, yVal = train_test_split(new_x, new_y, test_size = 0.2, random_state = 42)
+    #np.savetxt('train_idx', idx1)
+    #np.savetxt('test_idx', idx2)
+
+    print('train size: ', xTrain.shape)
+    print('train labels: ', yTrain.shape)
+    print('Valid size: ',  xVal.shape)
 
 #### LOAD TEST DATA #######
 new_x = pd.DataFrame()
@@ -121,15 +133,16 @@ model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['ac
 num_batch = 1000
 num_epochs = 10
 es = EarlyStopping(monitor='val_accuracy', min_delta=0, patience=num_epochs, mode='auto', baseline=None, restore_best_weights=True, verbose=1)
-model.fit(xTrain, yTrain, batch_size=num_batch, validation_data=[xVal, yVal], epochs = num_epochs, verbose=1)
-#, callbacks=[es])
-
+if train_flag:
+    model.fit(xTrain, yTrain, batch_size=num_batch, validation_data=[xVal, yVal], epochs = num_epochs, verbose=1)
+    #, callbacks=[es])
+    model.save(output_dir + run_no + '/model_weights')
+else:
+    model = load_model(model_path)
 print(model.evaluate(xTest,yTest))
-model.save(output_dir + run_no + '/model_weights')
 
 prediction = np.argmax(model.predict(xTest), axis=1)
 y_test = np.argmax(yTest, axis=1)
-print(prediction)
 print('\n Accuracy: ')
 print(accuracy_score(y_test, prediction))
 print('\n F1 score: ')

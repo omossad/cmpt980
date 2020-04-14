@@ -17,4 +17,4 @@ module load python
 cd /home/omossad/projects/def-hefeeda/omossad/cmpt980/
 source venv/bin/activate
 cd /home/omossad/projects/def-hefeeda/omossad/cmpt980/code/
-python ML_binary_classifier_large.py ref_features_v2.txt run_no_
+python ML_binary_classifier.py train features.txt run_no_

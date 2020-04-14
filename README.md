@@ -1,3 +1,42 @@
+# **ADIDoS: Automatic Detection and Identification of DDoS**
+
+This repository provides the necessary codes to reproduce the work done in the CMPT980 project.
+A pre-print will be provided the initial version is submitted to ICCST2020
+
+
+## Dependencies
+
+The code has been tested using python **3.7.4**
+The requirements.txt provides the required packages.
+
+## Folder
+
+Our codes are provided in the **code** folder.
+The reference paper we used in the evaluations can be reproduced using the codes in the **reference** folder. This code was clone and modified from the following repository:
+We ran our codes using computecanada, therefore we provided the scripts to submit jobs to the large GPU nodes in the **cedar** folder.
+Additionally, we provide 2 pre-trained models to test the code.
+
+## Instructions
+First create a new virtual environment
+Then install the dependencies
+
+Next, create a folder to hold the outputs
+
+Modify the following directories in the code to point to the actual directories.
+
+[Optional] For quick testing of the code, restrict the number of rows read from the files to a small number using:
+
+In order to train the network use the following command
+
+For just testing the pre-trained network, use the following command
+Just replace the model with your saved model.
+
+### Running the reference code ###
+To run the reference code you need to do the following:
+We only managed to run this code using a maximum of 1M rows only from each file, otherwise we get out of memory errors.
+
+
+
 
 Added new files to the new_approach folder
 ML_binary_classifier: this file uses the same approach as the reference code
