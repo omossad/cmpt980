@@ -7,7 +7,7 @@ A pre-print will be provided the initial version is submitted to ICCST2020
 1- **requirements.txt**: packages and dependencies.\
 2- **code**: folder containing the final codes.\
 3- **reference**: folder containing the replication of the reference code.\
-4- **cedar**: job scripts and outputs for running on Compute Canada.\
+4- **cedar**: job scripts and outputs for running on Compute Canada.
 
 ### 1- Dependencies ###
 
