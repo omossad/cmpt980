@@ -1,73 +1,100 @@
-# **ADIDoS: Automatic Detection and Identification of DDoS**
+# **ADIDoS: Automatic Detection and Identification of DDoS** #
 
-This repository provides the necessary codes to reproduce the work done in the CMPT980 project.
+This repository provides the necessary codes to reproduce the work done in the CMPT980 project.\
 A pre-print will be provided the initial version is submitted to ICCST2020
 
+## Folders and Files ##
+1- **requirements.txt**: packages and dependencies.\
+2- **code**: folder containing the final codes.\
+3- **reference**: folder containing the replication of the reference code.\
+4- **cedar**: job scripts and outputs for running on Compute Canada.\
 
-## Dependencies
+### 1- Dependencies ###
 
-The code has been tested using python **3.7.4**
-The requirements.txt provides the required packages.
+The code has been tested using python **3.7.4**\
+The **requirements.txt** provides the required packages.
 
-## Folder
+### 2- Code ###
+Our codes are provided in the **code** folder.\
+There are 2 executable codes:\
+1- **ML_binary_classifier.py**: for detecting malicious Vs benign traffic.\
+2- **ML_category_classifier.py**: for classifying the type of DDoS attack.\
+There is a **features.txt** file that determines which features will be used in the training.
+### 3- Reference ###
+The reference paper we used in the evaluations can be reproduced using the code in the **reference** folder.\
+This code was cloned and modified from the following repository:\
+https://github.com/tompkj/647_ML_Final 
 
-Our codes are provided in the **code** folder.
-The reference paper we used in the evaluations can be reproduced using the codes in the **reference** folder. This code was clone and modified from the following repository:
-We ran our codes using computecanada, therefore we provided the scripts to submit jobs to the large GPU nodes in the **cedar** folder.
-Additionally, we provide 2 pre-trained models to test the code.
+### 4- Cedar ###
+We ran our codes using Compute Canada, therefore we provided the scripts to submit jobs to the large GPU nodes in the **cedar** folder.\
+Additionally, we provide 2 pre-trained models to test the code inside the **cedar/output** folder.
 
-## Instructions
-First create a new virtual environment
-Then install the dependencies
-
-Next, create a folder to hold the outputs
-
-Modify the following directories in the code to point to the actual directories.
-
-[Optional] For quick testing of the code, restrict the number of rows read from the files to a small number using:
+## Instructions ##
+The code depends on the CIC-DDoS 2019 dataset.\
+You will need to download and extract the .CSV files from the dataset using this link: https://www.unb.ca/cic/datasets/ddos-2019.html \
+The following instructions apply to both binary and category classifiers.\
+\
+Create a new virtual environment
+``` 
+python3 -m venv /path/to/new/virtual/environment
+```
+Activate the environment
+```
+cd /path/to/new/virtual/environment
+/bin/activate
+```
+Move to the project folder and install the dependencies
+```
+cd /path/to/project
+pip3 install -r requirements.txt
+```
+Create a folder to hold the outputs
+```
+mkdir cedar/output/new_folder
+```
+Navigate to the code Folders
+```
+cd code
+```
+Modify the following directories in the **ML_binary_classifier.py** or **ML_category_classifier.py** to point to the actual directories.
+```Python
+train_dir  = '/CICDDoS2019/CSVs/01-12/'
+test_dir   = '/CICDDoS2019/CSVs/03-11/'
+output_dir ='../cedar/output/new_output_folder'
+```
+[*Optional*]\
+For quick testing of the code, restrict the number of rows read from the files to a small number using:
+```Python
+df = pd.read_csv(filename, nrows=100)
+```
+You can modify the **features.txt** to include more features or alternatively use the default settings.\
 
 In order to train the network use the following command
+```
+python3 ML_binary_classifier.py train features.txt new_output_folder
+or
+python3 ML_category_classifier.py train features.txt new_output_folder
+
+```
 
 For just testing the pre-trained network, use the following command
-Just replace the model with your saved model.
+```
+python3 ML_binary_classifier.py test features.txt new_output_folder ../cedar/output/ML_binary_classifier_model
+or
+python3 ML_category_classifier.py test features.txt new_output_folder ../cedar/output/ML_category_classifier_model
+```
+You can replace the model with your saved model or use the already saved ones.
 
 ### Running the reference code ###
-To run the reference code you need to do the following:
-We only managed to run this code using a maximum of 1M rows only from each file, otherwise we get out of memory errors.
+To run the reference code, most instructions are similar.\
+We only managed to run this code using a maximum of 1M rows only from each file, otherwise we get *out of memory errors*.
+```
+cd ../reference
+python3 reference.py features.txt
+```
 
-
-
-
-Added new files to the new_approach folder
-ML_binary_classifier: this file uses the same approach as the reference code
-ML_category_classifier: this file combines all test and train data and tries to classify the correct attack label
-
-Note:
-To include more features, just modify the features file.
-
-Note: 
-Test and train files are included automatically.
-
-Note: 
-labels with similar names are combined, for instance DrDoS_ is removed and UDP-lag and UDPLag are considered as one.
-
-Required:
-Fine tune the ML and select the appropriate features.
-
-Cedar:
-2 scripts are included to schedule jobs and return the outputs in the cedar_logs folder.
-
-Model outputs and weights are saved in the same folder for future use.
-
-The code has been tested using python 3.7.4 and computecanada 4 GPU nodes.
-To run the code you need to do the following:
-- Initilaize a new vitual environment with python3
-- Activate the environment
-- Install the requirement.txt packages
-- Modify the directories 
-- Dataset Directory and output directory where the model and results will be saved
-- Next run the code using 
-where features.txt is the file containing the features, so feel free to modify.
-
-In order to execute the code on computecanada, you need to acquire access to the cluster and modify the email and pathes in the bash script to point to your local directories.
-
+In order to execute the code on Compute Canada, you need to acquire access to the cluster and modify the email and paths in the bash script to point to your local directories.
+```
+cd ../cedar/scripts
+sbatch filename.sh
+```
