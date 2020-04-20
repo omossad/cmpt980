@@ -1,4 +1,4 @@
-# **ADIDoS: Automatic Detection and Identification of DDoS** #
+# **ADIDoS: Automatic Detection and Identification of DDoS Attacks** #
 
 This repository provides the necessary codes to reproduce the work done in the CMPT980 project.\
 A pre-print will be provided the initial version is submitted to ICCST2020
@@ -16,10 +16,15 @@ The **requirements.txt** provides the required packages.
 
 ### 2- Code ###
 Our codes are provided in the **code** folder.\
-There are 2 executable codes:\
+There are 2 executable codes for the models:\
 1- **ML_binary_classifier.py**: for detecting malicious Vs benign traffic.\
 2- **ML_category_classifier.py**: for classifying the type of DDoS attack.\
 There is a **features.txt** file that determines which features will be used in the training.
+
+There are 2 codes for the dataset and feature exploration:\
+1- **feature_exploration.py**: Code for recursive feature elimination. Outputs the plot of the corss validation scores vs. number of selected features to identify number of important features. Also, based on the previous step, it outputs 28 most important features to be used as input of the classifier codes.
+2- **dataset_exploration.py**: Is a basic code for reading all of the data and outputs a plot of the label distribution (types of attacks) in the dataset. Also, outputs mean of the "Flow duration (us)" in attack and bengin types. These duration means are used to compare the detection latency vs. attack flow duration.
+
 ### 3- Reference ###
 The reference paper we used in the evaluations can be reproduced using the code in the **reference** folder.\
 This code was cloned and modified from the following repository:\
@@ -85,6 +90,16 @@ python3 ML_category_classifier.py test features.txt new_output_folder ../cedar/o
 ```
 You can replace the model with your saved model or use the already saved ones.
 
+### Running the feature and dataset exploration codes
+For running the feature_exploration.py use: 
+```
+python feature_exploration.py <path to directory of training CSVs> <path to directory of test CSVs>
+```
+For running the dataset_exploration.py use: 
+```
+python dataset_exploration.py <path of features.txt> 
+```
+The output plots of these two codes are saved to "SVG" files. 
 ### Running the reference code ###
 To run the reference code, most instructions are similar.\
 We only managed to run this code using a maximum of 1M rows only from each file, otherwise we get *out of memory errors*.
