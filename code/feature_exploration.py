@@ -50,7 +50,7 @@ df_from_each_file_train = (pd.read_csv(f, header=None, names=features, skiprows=
 df = pd.concat(df_from_each_file_train, ignore_index=True)
 
 # Used a portion of the data set for the feature exploaroion, different test directory can be loaded
-path_test = sys.argv[1]
+path_test = sys.argv[2]
 all_files_test = glob.glob(path_test + "*.csv")
 df_from_each_file_test = (pd.read_csv(f, header=None, names=features, skiprows=22000, nrows=4000) for f in all_files_test)
 df_test   = pd.concat(df_from_each_file_test, ignore_index=True)
