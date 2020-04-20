@@ -22,7 +22,7 @@ There are 2 executable codes for the models:\
 There is a **features.txt** file that determines which features will be used in the training.
 
 There are 2 codes for the dataset and feature exploration:\
-1- **feature_exploration.py**: Code for recursive feature elimination. Outputs the plot of the corss validation scores vs. number of selected features to identify number of important features. Also, based on the previous step, it outputs 28 most important features to be used as input of the classifier codes.
+1- **feature_exploration.py**: Code for recursive feature elimination. Outputs the plot of the corss validation scores vs. number of selected features to identify number of important features. Also, based on the previous step, it outputs 28 most important features to be used as input of the classifier codes.\
 2- **dataset_exploration.py**: Is a basic code for reading all of the data and outputs a plot of the label distribution (types of attacks) in the dataset. Also, outputs mean of the "Flow duration (us)" in attack and bengin types. These duration means are used to compare the detection latency vs. attack flow duration.
 
 ### 3- Reference ###
